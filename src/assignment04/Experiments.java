@@ -27,8 +27,8 @@ import java.util.*;
  * public static helper methods, etc.
  * </p>
  * 
- * @author [ Your name(s) here ]
- * @version [ Date here ]
+ * @author Boden Archuleta
+ * @version 10/4/2017
  */
 final public class Experiments  
 {
@@ -85,7 +85,22 @@ final public class Experiments
      */
     public static <T> void insertionSort (T[] data, int startPos, int endPos, Comparator<T> comparator)
     {
-        // Students must implement this method.
+    	int currentPos;
+    	T elementToInsert;
+    	
+    	for (int count = startPos + 1; count <= endPos; count++)
+    	{
+    		currentPos = count;
+    		elementToInsert = data[currentPos];
+    		
+    		while(currentPos > 0 && comparator.compare(elementToInsert, data[currentPos - 1]) < 0)
+    		{
+    			data[currentPos] = data[currentPos - 1];
+    			currentPos--;
+    		}
+    		
+    		data[currentPos] = elementToInsert;
+    	}
     }
     
     /**

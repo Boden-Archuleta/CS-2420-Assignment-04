@@ -1,0 +1,16 @@
+What I need to implement:
+	insertionSort()
+	partition()	
+	quicksortWithCutOff() Both versions
+	quicksort()
+	twoWayMerge()
+	threeWayMerge()
+	twoWayMergeSort()
+	threeWayMergeSort()
+	
+	
+Start with the selection sort. 
+
+Then move on to quicksort. Partition is used as a helper function for the quicksort methods. 
+
+Do the merge methods last. They are the toughest. Give yourself time to write and test them. 
