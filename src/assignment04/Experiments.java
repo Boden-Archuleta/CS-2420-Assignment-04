@@ -147,9 +147,29 @@ final public class Experiments
      */
     public static <T> int partition (T[] data, int startPos, int endPos, Comparator<T> comparator)
     {        
-        // Students must implement this method. 
+        int pivotPos = (int) Math.floor((startPos + endPos) / 2);
+        swap(data, startPos, pivotPos);
+        pivotPos = startPos;
         
-        return 0;  // Stub - replace with your code.
+        int divide = endPos + 1;
+        
+        for (int currentPos = endPos; currentPos > startPos; currentPos--)
+        {
+        	if (comparator.compare(data[currentPos], data[pivotPos]) > 0)
+        	{
+        		swap(data, --divide, currentPos);
+        	}
+        }
+        
+        swap(data, pivotPos, divide - 1);
+        return divide - 1; 
+    }
+    
+    private static <T> void swap(T[] data, int firstIndex, int secondIndex)
+    {
+    	T temp = data[firstIndex];
+    	data[firstIndex] = data[secondIndex];
+    	data[secondIndex] = temp;
     }
     
     /**
@@ -178,7 +198,13 @@ final public class Experiments
      */
     public static <T> void quicksortWithCutoff (T[] data, int startPos, int endPos, Comparator<T> comparator, int cutoff)
     {
-        // Students must implement this method.  
+    	if (startPos < endPos)
+        {
+        	int partitionPos = partition(data, startPos, endPos, comparator);
+        	
+        	quicksortWithCutoff(data, startPos, partitionPos - 1, comparator, cutoff);
+        	quicksortWithCutoff(data, partitionPos + 1, endPos, comparator, cutoff);
+        }
     }
     
     /**
@@ -195,7 +221,7 @@ final public class Experiments
      */
     public static <T> void quicksort (T[] data, Comparator<T> comparator)
     {
-        // Students must implement this method.  
+        quicksortWithCutoff(data, 0, data.length - 1, comparator, 0);
     }
     
     /**
@@ -216,7 +242,7 @@ final public class Experiments
      */
     public static <T> void quicksortWithCutoff (T[] data, Comparator<T> comparator, int cutoff)
     {
-        // Students must implement this method.         
+        quicksortWithCutoff(data, 0, data.length - 1, comparator, cutoff);         
     }
     
     

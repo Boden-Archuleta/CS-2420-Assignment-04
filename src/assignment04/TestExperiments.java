@@ -34,7 +34,67 @@ public class TestExperiments {
 			public int compare(Integer left, Integer right){
 				return left.compareTo(right);
 			}
+		}, true);
+	}
+	
+//	@Test
+//	public void hackTest(){
+//		Integer[] data = {100, 5, 8, 2, 4, 12, 34, 1, 7, 55, 3};
+//		
+//		Experiments.quicksort(data, new Comparator<Integer>(){
+//			public int compare(Integer o1, Integer o2) {
+//				return o1.compareTo(o2);
+//			}	
+//		});
+//		
+//		for (int i = 0; i < data.length; i++){
+//			System.out.println(data[i]);
+//		}
+//	}
+	
+	@Test 
+	public void testQuickSort(){
+		String[] data = Experiments.generateMixedStrings(50, 10);
+		String[] dataToSort = new String[50];
+		System.arraycopy(data, 0, dataToSort, 0, data.length);
+		
+		Experiments.quicksort(data, new Comparator<String>(){
+			public int compare(String o1, String o2) {
+				return o1.compareTo(o2);
+			}	
+		});
+		
+		for (int i = 0; i < data.length; i++){
+			System.out.println(data[i]);
+		}
+		
+		Experiments.sortCheck(dataToSort, data, new Comparator<String>(){
+			public int compare(String left, String right){
+				return left.compareTo(right);
+			}
 		}, false);
 	}
 
+	@Test
+	public void testQuickSortCutoff(){
+		String[] data = Experiments.generateMixedStrings(50, 10);
+		String[] dataToSort = new String[50];
+		System.arraycopy(data, 0, dataToSort, 0, data.length);
+		
+		Experiments.quicksortWithCutoff(data, new Comparator<String>(){
+			public int compare(String left, String right){
+				return left.compareTo(right);
+			}
+		}, 5);
+		
+		for (int i = 0; i < data.length; i++){
+			System.out.println(data[i]);
+		}
+		
+		Experiments.sortCheck(dataToSort, data, new Comparator<String>(){
+			public int compare(String left, String right){
+				return left.compareTo(right);
+			}
+		}, false);
+	}
 }
