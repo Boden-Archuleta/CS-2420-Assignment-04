@@ -64,9 +64,9 @@ public class TestExperiments {
 			}	
 		});
 		
-		for (int i = 0; i < data.length; i++){
-			System.out.println(data[i]);
-		}
+//		for (int i = 0; i < data.length; i++){
+//			System.out.println(data[i]);
+//		}
 		
 		Experiments.sortCheck(dataToSort, data, new Comparator<String>(){
 			public int compare(String left, String right){
@@ -87,14 +87,37 @@ public class TestExperiments {
 			}
 		}, 5);
 		
-		for (int i = 0; i < data.length; i++){
-			System.out.println(data[i]);
-		}
+//		for (int i = 0; i < data.length; i++){
+//			System.out.println(data[i]);
+//		}
 		
 		Experiments.sortCheck(dataToSort, data, new Comparator<String>(){
 			public int compare(String left, String right){
 				return left.compareTo(right);
 			}
 		}, false);
+	}
+	
+	@Test
+	public void testTwoWayMerge(){
+		String[] data = Experiments.generateMixedStrings(50, 10);
+		String[] dataToSort = new String[50];
+		System.arraycopy(data, 0, dataToSort, 0, data.length);
+		
+		Experiments.twoWayMergesort(data, new Comparator<String>(){
+			public int compare(String arg0, String arg1) {
+				return arg0.compareTo(arg1);
+			}
+		});
+		
+//		for (int i = 0; i < data.length; i++){
+//			System.out.println(data[i]);
+//		}
+		
+		Experiments.sortCheck(dataToSort, data, new Comparator<String>(){
+			public int compare(String left, String right){
+				return left.compareTo(right);
+			}
+		}, true);
 	}
 }

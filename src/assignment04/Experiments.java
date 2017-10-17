@@ -150,7 +150,6 @@ final public class Experiments
         int pivotPos = (int) Math.floor((startPos + endPos) / 2);
         swap(data, startPos, pivotPos);
         pivotPos = startPos;
-        
         int divide = endPos + 1;
         
         for (int currentPos = endPos; currentPos > startPos; currentPos--)
@@ -290,7 +289,41 @@ final public class Experiments
      */
     public static <T> void twoWayMerge (final T[] source, final T[] dest, int startPosA, int startPosB, int endPosB, final Comparator<T> comparator)
     {
-        // Students must implement this method.  
+        int leftPos = startPosA;
+        int rightPos = startPosB;
+        int destPos = startPosA;
+        
+        while (leftPos < startPosB && rightPos <= endPosB)
+        {
+        	// left is less than or equal to right
+        	if(comparator.compare(source[leftPos], source[rightPos]) <= 0)
+        	{ 
+        		dest[destPos++] = source[leftPos++];
+        	}
+        	
+        	// left is greater than right
+        	else //if(comparator.compare(source[leftPos], source[rightPos]) > 0)
+        	{ 
+        		dest[destPos++] = source[rightPos++];
+        	}
+        }
+        
+        if (leftPos < startPosB)
+        {
+        	 while(leftPos < startPosB)
+        	 {
+        		 dest[destPos++] = source[leftPos++];
+        	 }
+        }
+        
+        if (rightPos <= endPosB)
+        {
+        	 while(rightPos <= endPosB)
+        	 {
+        		 dest[destPos++] = source[rightPos++];
+        	 }
+        }
+        
     }
 
     /**
@@ -364,7 +397,20 @@ final public class Experiments
      */
     public static <T> void twoWayMergesort (T[] data, Comparator<T> comparator)
     {
-        // Students must implement this method.  
+		T[] sortedData = (T[]) new Object[data.length];
+		System.arraycopy(data, 0, sortedData, 0, data.length);
+        int startPos, startPosB, endPos;
+        
+        for (int currentSize = 1; currentSize < data.length; currentSize *= 2)
+        {
+        	for (startPos = 0; startPos < data.length; startPos += currentSize * 2)
+        	{
+        		startPosB = Math.min((startPos + currentSize), data.length - 1);
+        		endPos = Math.min((startPosB + currentSize - 1), data.length - 1);
+        		twoWayMerge(data, sortedData, startPos, startPosB, endPos, comparator);
+                System.arraycopy(sortedData, 0, data, 0, data.length);
+        	}
+        }
     }
 
     /**
