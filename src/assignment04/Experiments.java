@@ -93,7 +93,7 @@ final public class Experiments
     		currentPos = count;
     		elementToInsert = data[currentPos];
     		
-    		while(currentPos > 0 && comparator.compare(elementToInsert, data[currentPos - 1]) < 0)
+    		while(currentPos > 0 && count(comparator.compare(elementToInsert, data[currentPos - 1])) < 0)
     		{
     			data[currentPos] = data[currentPos - 1];
     			currentPos--;
@@ -154,7 +154,7 @@ final public class Experiments
         
         for (int currentPos = endPos; currentPos > startPos; currentPos--)
         {
-        	if (comparator.compare(data[currentPos], data[pivotPos]) > 0)
+        	if (count(comparator.compare(data[currentPos], data[pivotPos])) > 0)
         	{
         		swap(data, --divide, currentPos);
         	}
@@ -293,36 +293,37 @@ final public class Experiments
         int rightPos = startPosB;
         int destPos = startPosA;
         
-        while (leftPos < startPosB && rightPos <= endPosB)
+        while (leftPos < startPosB || rightPos <= endPosB)
         {
         	// left is less than or equal to right
-        	if(comparator.compare(source[leftPos], source[rightPos]) <= 0)
+        	if(rightPos > endPosB || (leftPos < startPosB && count(comparator.compare(source[leftPos], source[rightPos])) <= 0))
         	{ 
         		dest[destPos++] = source[leftPos++];
         	}
         	
         	// left is greater than right
-        	else //if(comparator.compare(source[leftPos], source[rightPos]) > 0)
+        	else if(leftPos >= startPosB || (rightPos <= endPosB && count(comparator.compare(source[leftPos], source[rightPos])) > 0))
         	{ 
         		dest[destPos++] = source[rightPos++];
         	}
         }
         
-        if (leftPos < startPosB)
-        {
-        	 while(leftPos < startPosB)
-        	 {
-        		 dest[destPos++] = source[leftPos++];
-        	 }
-        }
-        
-        if (rightPos <= endPosB)
-        {
-        	 while(rightPos <= endPosB)
-        	 {
-        		 dest[destPos++] = source[rightPos++];
-        	 }
-        }
+        // Drain remaining elements
+//        if (leftPos < startPosB)
+//        {
+//        	 while(leftPos < startPosB)
+//        	 {
+//        		 dest[destPos++] = source[leftPos++];
+//        	 }
+//        }
+//        
+//        if (rightPos <= endPosB)
+//        {
+//        	 while(rightPos <= endPosB)
+//        	 {
+//        		 dest[destPos++] = source[rightPos++];
+//        	 }
+//        }
         
     }
 
@@ -373,7 +374,81 @@ final public class Experiments
      */
     public static <T> void threeWayMerge (final T[] source, final T[] dest, int startPosA, int startPosB, int startPosC, int endPosC, final Comparator<T> comparator)
     {
-        // Students must implement this method.  
+    	int posA = startPosA;
+    	int posB = startPosB;
+    	int posC = startPosC;
+    	int destPos = startPosA;
+   	
+    	while (posA < startPosB && posB < startPosC && posC <= endPosC)
+    	{
+    		// If A is smallest
+    		if (posA < startPosB && count(comparator.compare(source[posA], source[posB])) <= 0 && count(comparator.compare(source[posA], source[posC])) <= 0)
+    		{
+    			dest[destPos++] = source[posA++];
+    		}
+    		
+    		// If B is smallest 
+    		else if (posB < startPosC && count(comparator.compare(source[posB], source[posA])) <= 0 && count(comparator.compare(source[posB], source[posC])) <= 0)
+    		{
+    			dest[destPos++] = source[posB++];
+    		}
+    		
+    		// if C is smallest
+    		else if (posC <= endPosC)
+    		{
+    			dest[destPos++] = source[posC++];
+    		}
+    	}
+    	
+    	// Drain remaining elements
+    	// Ugly, I know...
+    	if (posA < startPosB && posB < startPosC)
+    	{
+    		 while (posA < startPosB || posB < startPosC)
+    	     {
+    	       	if(posB >= startPosC || (posA < startPosB && count(comparator.compare(source[posA], source[posB])) <= 0))
+    	       	{ 
+    	       		dest[destPos++] = source[posA++];
+    	       	}
+    	       	
+    	       	else if(posA >= startPosB || (posB < startPosC && count(comparator.compare(source[posA], source[posB])) > 0))
+    	       	{ 
+    	       		dest[destPos++] = source[posB++];
+    	       	}
+    	     }
+    	}
+    	
+    	while (posB < startPosC && posC <= endPosC)
+    	{
+    		while (posB < startPosC || posC <= endPosC)
+ 	        {
+ 	        	if(posC > endPosC || (posB < startPosC && count(comparator.compare(source[posB], source[posC])) <= 0))
+ 	        	{ 
+ 	        		dest[destPos++] = source[posB++];
+ 	        	}
+ 	        	
+ 	        	else if(posB >= startPosC || (posC <= endPosC && count(comparator.compare(source[posB], source[posC])) > 0))
+ 	        	{ 
+ 	        		dest[destPos++] = source[posC++];
+ 	        	}
+ 	        }
+    	}
+    	
+    	if (posA < startPosB && posC <= endPosC)
+    	{
+    		while (posA < startPosB || posC <= endPosC)
+ 	        {
+ 	        	if(posC > endPosC || (posA < startPosB && count(comparator.compare(source[posA], source[posC])) <= 0))
+ 	        	{ 
+ 	        		dest[destPos++] = source[posA++];
+ 	        	}
+ 	        	
+ 	        	else if(posA >= startPosB || (posC <= endPosC && count(comparator.compare(source[posA], source[posC])) > 0))
+ 	        	{ 
+ 	        		dest[destPos++] = source[posC++];
+ 	        	}
+ 	        }
+    	}
     }
 
     /**
@@ -434,7 +509,21 @@ final public class Experiments
      */
     public static <T> void threeWayMergesort (T[] data, Comparator<T> comparator)
     {
-        // Students must implement this method.  
+    	T[] sortedData = (T[]) new Object[data.length];
+		System.arraycopy(data, 0, sortedData, 0, data.length);
+		int posA, posB, posC, endPos;
+		
+		for(int currentSize = 1; currentSize < data.length; currentSize *= 3)
+		{
+			for(posA = 0; posA < data.length; posA += currentSize * 3)
+			{
+				posB = Math.min(posA + currentSize, data.length - 1);
+				posC = Math.min(posB + currentSize, data.length - 1);
+				endPos = Math.min(posC + currentSize - 1, data.length - 1);
+				threeWayMerge(data, sortedData, posA, posB, posC, endPos, comparator);
+				System.arraycopy(sortedData, 0, data, 0, data.length);
+			}
+		}
     }
     
     /* Utility functions for testing. */
